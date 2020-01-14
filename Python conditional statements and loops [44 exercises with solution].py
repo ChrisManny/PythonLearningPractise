@@ -299,20 +299,20 @@
 
 
 # class Student():
-#     """
-#     - 姓名
-#     - 性别
-#     - 分数
-#     - 成绩等级（A、B、C、D）
-#     """
-#
-#     def __init__(self, name):
-#         self.grade = int(input("请输入你的分数： "))
-#         self.name = name
-#
-#     def grade_lv_calculate(self):
-#         try:
-#             if 60 > int(self.grade) >= 0:
+# #     """
+# #     - 姓名
+# #     - 性别
+# #     - 分数
+# #     - 成绩等级（A、B、C、D）
+# #     """
+# #
+# #     def __init__(self, name):
+# #         self.grade = int(input("请输入你的分数： "))
+# #         self.name = name
+# #
+# #     def grade_lv_calculate(self):
+# #         try:
+# #             if 60 > int(self.grade) >= 0:
 #                 self.grade_lv = "D"
 #                 print(f"你的等级是{self.grade_lv}")
 #             elif 75 > int(self.grade) >= 60:
@@ -332,3 +332,4 @@
 #
 # student = Student("zhnagzeyu")
 # student.grade_lv_calculate()
+# 测试Git
