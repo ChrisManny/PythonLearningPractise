@@ -260,21 +260,10 @@
 # import time
 # file_name = "C:\\Users\\Chris Manny\\Desktop\\Ireland\\guest_book.txt"
 #
-# try:
-#     while file_name:
-#             with open(file_name, "a", encoding="utf-8") as file_object:
-#                 user_name = input("请问你的名字是： ")
-#                 print(f"你好，{user_name}。欢迎来到我的网站！")
-#                 file_object.write(f"{user_name}\n于{time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))}刚刚访问了网站\n")
-# except:
-#     pass
-# import  random
-# class Dize:
-#     """
-#     随机掷骰子两次
-#     """
-#     # def __init__(self):
-#     #     self = self
+# try: while file_name: with open(file_name, "a", encoding="utf-8") as file_object: user_name = input("请问你的名字是： ")
+# print(f"你好，{user_name}。欢迎来到我的网站！") file_object.write(f"{user_name}\n于{time.strftime('%Y-%m-%d %H:%M:%S',
+# time.localtime(time.time()))}刚刚访问了网站\n") except: pass import  random class Dize: """ 随机掷骰子两次 """ # def __init__(
+# self): #     self = self
 #
 #     def roll(self):
 #         """
@@ -337,29 +326,97 @@
 请把下面的Student对象的gender字段对外隐藏起来，用get_gender()和set_gender()代替，并检查参数有效性：
 """
 
+# class Student:
+#     def __init__(self, name, gender):
+#         self.name = name
+#         self.__gender = gender
+#
+#     def get_gender(self):
+#         """
+#         获取gender（增加访问权限，防止外部修改）
+#         :return: self.__gender
+#         """
+#         print(f"你当前的性别是： {self.__gender}")
+#
+#     def set_gender(self):
+#         """
+#         修改gender
+#         :return: self.__gender
+#         """
+#         user_input_gender = input("请输入你的新性别： ")
+#         self.__gender = user_input_gender
+#         print(f"你当前的新性别是： {self.__gender}")
+#         # print(type(self.__gender))
+#
+#
+# stu = Student("Zoey", "male")
+# stu.get_gender()
+# stu.set_gender()
+
+"""
+请利用@property给一个Student对象计算他的年龄
+"""
+
 
 class Student:
-    def __init__(self, name, gender):
-        self.name = name
-        self.__gender = gender
+    """
+    birth 生日（要求用户输入，属于setter）
+    age 年龄 = 2020 - 生日（只读属性）
+    """
 
-    def get_gender(self):
-        """
-        获取gender（增加访问权限，防止外部修改）
-        :return: self.__gender
-        """
-        print(f"你当前的性别是： {self.__gender}")
+    @property
+    def birth(self):
+        return self._birth
 
-    def set_gender(self):
-        """
-        修改gender
-        :return: self.__gender
-        """
-        user_input_gender = input("请输入你的新性别： ")
-        self.__gender = user_input_gender
-        print(f"你当前的新性别是： {self.__gender}")
+    @birth.setter
+    def birth(self, user_input_birth):
+        self._birth = user_input_birth
+
+    @property
+    def age(self):
+        return 2020 - self._birth
 
 
-stu = Student("Zoey", "male")
-stu.get_gender()
-stu.set_gender()
+stu = Student()
+stu.birth = 1994
+print(stu.age)
+
+"""
+请利用@property给一个Screen对象加上width和height属性，以及一个只读属性resolution：
+"""
+
+
+class Screen:
+    # width属性声明
+    @property
+    def width(self):
+        return self._width
+
+    @width.setter
+    def width(self, user_input_width):
+        self._width = user_input_width
+
+    # height属性声明
+    @property
+    def height(self):
+        return self._height
+
+    @height.setter
+    def height(self, user_input_height):
+        self._height = user_input_height
+
+    # resolution属性声明
+    @property
+    def resolution(self):
+        return self._resolution
+
+    def count_area(self,width,height):
+        width = self._width
+        height = self._height
+        area = width * height
+        print(f"面积是： {area} 。")
+
+screen = Screen()
+screen.width = int(input("请输入宽度： "))
+screen.height = int(input("请输入高度： "))
+screen.count_area(screen.width,screen.height)
