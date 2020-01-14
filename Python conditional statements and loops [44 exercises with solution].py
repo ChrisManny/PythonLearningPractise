@@ -297,7 +297,6 @@
     - 成绩等级（A、B、C、D）
 """
 
-
 # class Student():
 # #     """
 # #     - 姓名
@@ -333,3 +332,34 @@
 # student = Student("zhnagzeyu")
 # student.grade_lv_calculate()
 # 测试Git
+
+"""
+请把下面的Student对象的gender字段对外隐藏起来，用get_gender()和set_gender()代替，并检查参数有效性：
+"""
+
+
+class Student:
+    def __init__(self, name, gender):
+        self.name = name
+        self.__gender = gender
+
+    def get_gender(self):
+        """
+        获取gender（增加访问权限，防止外部修改）
+        :return: self.__gender
+        """
+        print(f"你当前的性别是： {self.__gender}")
+
+    def set_gender(self):
+        """
+        修改gender
+        :return: self.__gender
+        """
+        user_input_gender = input("请输入你的新性别： ")
+        self.__gender = user_input_gender
+        print(f"你当前的新性别是： {self.__gender}")
+
+
+stu = Student("Zoey", "male")
+stu.get_gender()
+stu.set_gender()
