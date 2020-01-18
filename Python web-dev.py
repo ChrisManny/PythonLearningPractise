@@ -353,70 +353,120 @@
 # stu.get_gender()
 # stu.set_gender()
 
+# """
+# 请利用@property给一个Student对象计算他的年龄
+# """
+#
+#
+# class Student:
+#     """
+#     birth 生日（要求用户输入，属于setter）
+#     age 年龄 = 2020 - 生日（只读属性）
+#     """
+#
+#     @property
+#     def birth(self):
+#         return self._birth
+#
+#     @birth.setter
+#     def birth(self, user_input_birth):
+#         self._birth = user_input_birth
+#
+#     @property
+#     def age(self):
+#         return 2020 - self._birth
+#
+#
+# stu = Student()
+# stu.birth = 1994
+# print(stu.age)
+#
+# """
+# 请利用@property给一个Screen对象加上width和height属性，以及一个只读属性resolution：
+# """
+#
+#
+# class Screen:
+#     # width属性声明
+#     @property
+#     def width(self):
+#         return self._width
+#
+#     @width.setter
+#     def width(self, user_input_width):
+#         self._width = user_input_width
+#
+#     # height属性声明
+#     @property
+#     def height(self):
+#         return self._height
+#
+#     @height.setter
+#     def height(self, user_input_height):
+#         self._height = user_input_height
+#
+#     # resolution属性声明
+#     @property
+#     def resolution(self):
+#         return self._resolution
+#
+#     def count_area(self,width,height):
+#         width = self._width
+#         height = self._height
+#         area = width * height
+#         print(f"面积是： {area} 。")
+#
+# screen = Screen()
+# screen.width = int(input("请输入宽度： "))
+# screen.height = int(input("请输入高度： "))
+# screen.count_area(screen.width,screen.height)
+
 """
-请利用@property给一个Student对象计算他的年龄
+模拟浏览器访问一个网页
 """
 
+# 1.导入模块
+import socket
+import sys
 
-class Student:
-    """
-    birth 生日（要求用户输入，属于setter）
-    age 年龄 = 2020 - 生日（只读属性）
-    """
+# 2.创建socket
+browser_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    @property
-    def birth(self):
-        return self._birth
+# 3.连接某个网址 www.google.com
+browser_client.connect(("www.baidu.com", 80))
 
-    @birth.setter
-    def birth(self, user_input_birth):
-        self._birth = user_input_birth
-
-    @property
-    def age(self):
-        return 2020 - self._birth
-
-
-stu = Student()
-stu.birth = 1994
-print(stu.age)
-
+# 4.拼接请求头
 """
-请利用@property给一个Screen对象加上width和height属性，以及一个只读属性resolution：
+1.请求行
+2.请求头
+3.请求空行
 """
+request_line = "GET / HTTP/1.1\r\n"
+request_header = "HOST:www.baidu.com\r\n"
+request_blank = "\r\n"
 
+request_data = request_line + request_header + request_blank
+# 5.发送请求头
+browser_client.send(request_data.encode())
 
-class Screen:
-    # width属性声明
-    @property
-    def width(self):
-        return self._width
+# 6.通过文件保存response
 
-    @width.setter
-    def width(self, user_input_width):
-        self._width = user_input_width
+data_body = ""
+try:
+    while True:
+        recv_data = browser_client.recv(1024) # 接受服务器返回的数据
+        recv_data_decode = recv_data.decode("latin1")  # 接受服务器返回的数据
+        if not recv_data_decode:
+            break
+        else:
+            data_body += recv_data_decode
+        # raise UnicodeDecodeError("有个别字符无法转译")
+finally:
+    recv_data_html_location = data_body.find("<!DOCTYPE html>")
+    recv_data_html_location_cut = recv_data_decode[recv_data_html_location:]
+    with open("index.html","w") as file_baidu:
+        file_baidu.write(recv_data_html_location_cut)
+    print("done")
 
-    # height属性声明
-    @property
-    def height(self):
-        return self._height
-
-    @height.setter
-    def height(self, user_input_height):
-        self._height = user_input_height
-
-    # resolution属性声明
-    @property
-    def resolution(self):
-        return self._resolution
-
-    def count_area(self,width,height):
-        width = self._width
-        height = self._height
-        area = width * height
-        print(f"面积是： {area} 。")
-
-screen = Screen()
-screen.width = int(input("请输入宽度： "))
-screen.height = int(input("请输入高度： "))
-screen.count_area(screen.width,screen.height)
+# 7.关闭socket
+browser_client.close()
