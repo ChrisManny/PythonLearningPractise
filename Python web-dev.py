@@ -321,6 +321,7 @@
 # student = Student("zhnagzeyu")
 # student.grade_lv_calculate()
 # 测试Git
+from datetime import time
 
 """
 请把下面的Student对象的gender字段对外隐藏起来，用get_gender()和set_gender()代替，并检查参数有效性：
@@ -421,52 +422,124 @@
 # screen.height = int(input("请输入高度： "))
 # screen.count_area(screen.width,screen.height)
 
+# """
+# 模拟浏览器访问一个网页
+# """
+#
+# # 1.导入模块
+# import socket
+# import sys
+#
+# # 2.创建socket
+# browser_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#
+# # 3.连接某个网址 www.google.com
+# browser_client.connect(("www.baidu.com", 80))
+#
+# # 4.拼接请求头
+# """
+# 1.请求行
+# 2.请求头
+# 3.请求空行
+# """
+# request_line = "GET / HTTP/1.1\r\n"
+# request_header = "HOST:www.baidu.com\r\n"
+# request_blank = "\r\n"
+#
+# request_data = request_line + request_header + request_blank
+# # 5.发送请求头
+# browser_client.send(request_data.encode())
+#
+# # 6.通过文件保存response
+#
+# data_body = ""
+# try:
+#     while True:
+#         recv_data = browser_client.recv(1024) # 接受服务器返回的数据
+#         recv_data_decode = recv_data.decode("latin1")  # 接受服务器返回的数据
+#         if not recv_data_decode:
+#             break
+#         else:
+#             data_body += recv_data_decode
+#         # raise UnicodeDecodeError("有个别字符无法转译")
+# finally:
+#     recv_data_html_location = data_body.find("<!DOCTYPE html>")
+#     recv_data_html_location_cut = recv_data_decode[recv_data_html_location:]
+#     with open("index.html","w") as file_baidu:
+#         file_baidu.write(recv_data_html_location_cut)
+#     print("done")
+#
+# # 7.关闭socket
+# browser_client.close()
+#
+# """
+# 测试子线程守护机制
+# """
+#
+# # 导入模块
+# import threading
+# import time
+#
+# # 自定义线程类（执行一个循环函数，设置time sleep）
+# class Mythread(threading.Thread):
+#     def run(self):
+#         for i in range(5):
+#             print(i)
+#             i += 1
+#             time.sleep(0.2)
+#         print("子线程执行结束")
+#
+# # 创建线程实例，查看子线程与主线程结束顺序
+# mythread = Mythread()
+# mythread.setDaemon(True)
+# mythread.start()
+# print("主线程执行结束")
+
+
 """
-模拟浏览器访问一个网页
+通过两个线程锁实现计数两百万（各100万）
 """
+from threading import Thread
+import time
 
-# 1.导入模块
-import socket
-import sys
+# 定义一个计数函数
+count_num = 0
+# thread_lock = Lock()
 
-# 2.创建socket
-browser_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+def get_time():
+    now = time.time()
+    # 格式化年月日时分秒
+    local_time = time.localtime(now)
+    date_format_localtime = time.strftime('%Y-%m-%d %H:%M:%S', local_time)
+    return date_format_localtime
 
-# 3.连接某个网址 www.google.com
-browser_client.connect(("www.baidu.com", 80))
 
-# 4.拼接请求头
-"""
-1.请求行
-2.请求头
-3.请求空行
-"""
-request_line = "GET / HTTP/1.1\r\n"
-request_header = "HOST:www.baidu.com\r\n"
-request_blank = "\r\n"
+def count():
+    global count_num
+    for i in range(1000):
+        # thread_lock.acquire()
+        count_num += 1
+    # thread_lock.release()
+    date_format_localtime = get_time()
+    print("1000000执行完成" + date_format_localtime)
 
-request_data = request_line + request_header + request_blank
-# 5.发送请求头
-browser_client.send(request_data.encode())
 
-# 6.通过文件保存response
+# 创建一个线程1
+count_thread1 = Thread(target=count)
 
-data_body = ""
-try:
-    while True:
-        recv_data = browser_client.recv(1024) # 接受服务器返回的数据
-        recv_data_decode = recv_data.decode("latin1")  # 接受服务器返回的数据
-        if not recv_data_decode:
-            break
-        else:
-            data_body += recv_data_decode
-        # raise UnicodeDecodeError("有个别字符无法转译")
-finally:
-    recv_data_html_location = data_body.find("<!DOCTYPE html>")
-    recv_data_html_location_cut = recv_data_decode[recv_data_html_location:]
-    with open("index.html","w") as file_baidu:
-        file_baidu.write(recv_data_html_location_cut)
-    print("done")
+# 创建一个线程2
+count_thread2 = Thread(target=count)
 
-# 7.关闭socket
-browser_client.close()
+
+# 定义主函数
+
+def main():
+    date_format_localtime = get_time()
+    count_thread1.start()
+    count_thread1.join()
+    count_thread2.start()
+    print("全部执行完成" + format(date_format_localtime))
+
+
+if __name__ == '__main__':
+    main()
