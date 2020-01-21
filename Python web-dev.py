@@ -496,50 +496,87 @@ from datetime import time
 # print("主线程执行结束")
 
 
-"""
-通过两个线程锁实现计数两百万（各100万）
-"""
-from threading import Thread
-import time
-
-# 定义一个计数函数
-count_num = 0
-# thread_lock = Lock()
-
-def get_time():
-    now = time.time()
-    # 格式化年月日时分秒
-    local_time = time.localtime(now)
-    date_format_localtime = time.strftime('%Y-%m-%d %H:%M:%S', local_time)
-    return date_format_localtime
-
-
-def count():
-    global count_num
-    for i in range(1000):
-        # thread_lock.acquire()
-        count_num += 1
-    # thread_lock.release()
-    date_format_localtime = get_time()
-    print("1000000执行完成" + date_format_localtime)
-
-
-# 创建一个线程1
-count_thread1 = Thread(target=count)
-
-# 创建一个线程2
-count_thread2 = Thread(target=count)
-
-
-# 定义主函数
-
-def main():
-    date_format_localtime = get_time()
-    count_thread1.start()
-    count_thread1.join()
-    count_thread2.start()
-    print("全部执行完成" + format(date_format_localtime))
-
-
-if __name__ == '__main__':
-    main()
+# """
+# 通过两个线程锁实现计数两百万（各100万）
+# """
+# from threading import Thread
+# import time
+#
+# # 定义一个计数函数
+# count_num = 0
+# # thread_lock = Lock()
+#
+# def get_time():
+#     now = time.time()
+#     # 格式化年月日时分秒
+#     local_time = time.localtime(now)
+#     date_format_localtime = time.strftime('%Y-%m-%d %H:%M:%S', local_time)
+#     return date_format_localtime
+#
+#
+# def count():
+#     global count_num
+#     for i in range(1000):
+#         # thread_lock.acquire()
+#         count_num += 1
+#     # thread_lock.release()
+#     date_format_localtime = get_time()
+#     print("1000000执行完成" + date_format_localtime)
+#
+#
+# # 创建一个线程1
+# count_thread1 = Thread(target=count)
+#
+# # 创建一个线程2
+# count_thread2 = Thread(target=count)
+#
+#
+# # 定义主函数
+#
+# def main():
+#     date_format_localtime = get_time()
+#     count_thread1.start()
+#     count_thread1.join()
+#     count_thread2.start()
+#     print("全部执行完成" + format(date_format_localtime))
+#
+#
+# if __name__ == '__main__':
+#     main()
+#
+# from threading import Thread,Lock
+# import threading
+#
+# # 定义函数，根据下标获取列表元素值
+# class Get_list(threading.Thread):
+#     def run(self):
+#         list_example = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+#         for i in range(len(list_example)):
+#             thread_lock.acquire()
+#             print(str(i) + " " + str(threading.current_thread().getName()))
+#             thread_lock.release()
+#
+# # 创建10个线程，观察资源的等待状态
+#
+# if __name__ == '__main__':
+#     thread_lock = Lock()
+#     thread1 = Get_list()
+#     thread2 = Get_list()
+#     thread3 = Get_list()
+#     thread4 = Get_list()
+#     thread5 = Get_list()
+#     thread6 = Get_list()
+#     thread7 = Get_list()
+#     thread8 = Get_list()
+#     thread9 = Get_list()
+#     thread10 = Get_list()
+#     thread1.start()
+#     thread2.start()
+#     thread3.start()
+#     thread4.start()
+#     thread5.start()
+#     thread6.start()
+#     thread7.start()
+#     thread8.start()
+#     thread9.start()
+#     thread10.start()
