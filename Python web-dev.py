@@ -321,7 +321,8 @@
 # student = Student("zhnagzeyu")
 # student.grade_lv_calculate()
 # 测试Git
-from datetime import time
+
+# import multiprocess
 
 """
 请把下面的Student对象的gender字段对外隐藏起来，用get_gender()和set_gender()代替，并检查参数有效性：
@@ -580,3 +581,127 @@ from datetime import time
 #     thread8.start()
 #     thread9.start()
 #     thread10.start()
+
+"""
+进程的基本使用
+1.导入模块
+2.创建一个进程对象
+3.启动进程
+4.主函数
+"""
+
+# # 1.导入模块
+# import multiprocessing
+#
+#
+# # 3.函数
+# def count():
+#     for i in range(5):
+#         print(i)
+#
+#
+# # 2.创建一个进程对象
+# demo_process = multiprocessing.Process(target=count)
+#
+# # 4.主函数
+# if __name__ == '__main__':
+#     demo_process.start()
+#     print("进程已启动")
+
+#
+# """
+# 创建一个循环函数
+# """
+# import multiprocessing, time, os
+#
+#
+# def count():
+#     """
+# 函数循环打印
+#     """
+#
+#     print(multiprocessing.current_process(), multiprocessing.current_process().pid)
+#     for i in range(10):
+#         print("*" * i)
+#         time.sleep(2)
+#     # 打印进程的名称以及进程编号
+#
+#
+# # import os
+#
+# if __name__ == '__main__':
+#     # 创建一个进程执行上述函数
+#     print_process = multiprocessing.Process(target=count, name="s")
+#     print_process.start()
+#     print(os.path.abspath("index.html"))  # 通过os.path模块获取文件路径
+
+# """
+# 队列的基本使用
+# """
+#
+# # 创建一个队列（指定长度）
+# import multiprocessing
+# quene_example = multiprocessing.Queue(5)
+# quene_example.put()
+
+# """
+# 实现一个线程不断生成一个随机数到一个队列中(考虑使用Queue这个模块)
+# 实现一个线程从上面的队列里面不断的取出奇数
+# 实现另外一个线程从上面的队列里面不断取出偶数
+# """
+# import queue
+# import random
+# import threading
+#
+#
+# # 实现一个线程不断生成一个随机数到一个队列中(考虑使用Queue这个模块)
+# def random_thread():
+#     """
+# 随机生成一个数字，并且将该数字保存到队列中
+#     """
+#     for i in range(10):
+#         qu_save_num.put(random.randint(0,100),block=False)
+#     print(f"1.队列内容是： {int(qu_save_num.get(block=False))}")
+#
+#
+# # 实现一个线程从上面的队列里面不断的取出奇数
+# def get_odd_in_queue():
+#     while qu_save_num:
+#         qu_save_num.get()
+#         if qu_save_num.get(block=False) % 2 != 0:
+#             print(f"2.队列中的奇数是 {qu_save_num.get(block=False)}")
+#
+#
+#     # 实现另外一个线程从上面的队列里面不断取出偶数
+#
+#
+# def get_even_in_queue():
+#     while qu_save_num:
+#         if qu_save_num.get(block=False) % 2 == 0 and qu_save_num.empty() == False:
+#             print(f"3.队列中的偶数是 {qu_save_num.get(block=False)}")
+#
+#
+#     # 主函数
+#
+#
+# if __name__ == '__main__':
+#     qu_save_num = queue.Queue()
+#     random_thread = threading.Thread(target=random_thread,)
+#     odd_num_in_qu = threading.Thread(target=get_odd_in_queue,)
+#     even_num_in_qu = threading.Thread(target=get_even_in_queue,)
+#     random_thread.start()
+#     random_thread.join()
+#     odd_num_in_qu.start()
+#     even_num_in_qu.start()
+
+import multiprocessing
+
+def copy():
+    print("正在拷贝")
+
+if __name__ == '__main__':
+    copy_file = multiprocessing.Pool(1)
+    for i in range(200):
+        copy_file.apply_async(copy)
+    copy_file.close()
+    copy_file.join()
