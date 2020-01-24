@@ -686,22 +686,82 @@
 #
 # if __name__ == '__main__':
 #     qu_save_num = queue.Queue()
-#     random_thread = threading.Thread(target=random_thread,)
-#     odd_num_in_qu = threading.Thread(target=get_odd_in_queue,)
-#     even_num_in_qu = threading.Thread(target=get_even_in_queue,)
+#     random_thread = threading.Thread(target=random_thread)
+#     odd_num_in_qu = threading.Thread(target=get_odd_in_queue)
+#     even_num_in_qu = threading.Thread(target=get_even_in_queue)
 #     random_thread.start()
 #     random_thread.join()
 #     odd_num_in_qu.start()
 #     even_num_in_qu.start()
 
-import multiprocessing
+# import multiprocessing
+#
+#
+# def copy():
+#     print("正在拷贝")
+#
+#
+# if __name__ == '__main__':
+#     copy_file = multiprocessing.Pool(1)
+#     for i in range(200):
+#         copy_file.apply_async(copy)
+#     copy_file.close()  # 停止该进程池接收其他进程任务
+#     copy_file.join()
 
-def copy():
-    print("正在拷贝")
+
+"""
+测试进程池中的进程异步执行效果
+"""
+#
+# from multiprocessing import Pool
+# import os
+#
+#
+# def count(i):
+#     """
+# 打印当前正在异步执行的进程池中的进程id
+#     """
+#     print(f"{i}——进程id：{os.getpid()}")
+#
+#
+# if __name__ == '__main__':
+#     pool_exm = Pool(3)
+#     pool_exm.map()
+#     for i in range(1,101):
+#         pool_exm.apply_async(count(i),args=(i,))
+#     pool_exm.close()
+#     pool_exm.join()
+
+
+from multiprocessing import Pool, Process  # 引进程池pool 和进程
+import time
+
+
+# 打印功能函数
+def func(n):
+    """
+打印数字1-10
+    :param n:
+    """
+    for i in range(10):
+        print(n + 1)
+
 
 if __name__ == '__main__':
-    copy_file = multiprocessing.Pool(1)
-    for i in range(200):
-        copy_file.apply_async(copy)
-    copy_file.close()
-    copy_file.join()
+    start = time.time()
+    pool = Pool(5)  # 不写默认是你电脑的核数+1
+    pool.map(func, range(100))  # 必须是一个可迭代的类型
+    pool_time = time.time() - start
+
+    # 开100个进程
+    p_lst = []
+    start = time.time()
+    for i in range(100):
+        p = Process(target=func, args=(i,))
+        p_lst.append(p)
+        p.start()
+    for p in p_lst: p.join()
+    Process_time = time.time() - start
+    print(pool_time, Process_time)
+
+
