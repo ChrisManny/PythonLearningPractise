@@ -712,6 +712,7 @@
 """
 测试进程池中的进程异步执行效果
 """
+
 #
 # from multiprocessing import Pool
 # import os
@@ -732,36 +733,138 @@
 #     pool_exm.close()
 #     pool_exm.join()
 
+#
+# from multiprocessing import Pool, Process  # 引进程池pool 和进程
+# import time
+#
+#
+# # 打印功能函数
+# def func(n):
+#     """
+# 打印数字1-10
+#     :param n:
+#     """
+#     for i in range(10):
+#         print(n + 1)
+#
+#
+# if __name__ == '__main__':
+#     start = time.time()
+#     pool = Pool(5)  # 不写默认是你电脑的核数+1
+#     pool.map(func, range(100))  # 必须是一个可迭代的类型
+#     pool_time = time.time() - start
+#
+#     # 开100个进程
+#     p_lst = []
+# from multiprocessing import Pool, Process  # 引进程池pool 和进程
+# import time
+#
+#
+# # 打印功能函数
+# def func(n):
+#     """
+# 打印数字1-10
+#     :param n:
+#     """
+#     for i in range(10):
+#         print(n + 1)
+#
+#
+# if __name__ == '__main__':
+#     start = time.time()
+#     pool = Pool(5)  # 不写默认是你电脑的核数+1
+#     pool.map(func, range(100))  # 必须是一个可
+#     start = time.time()
+#     for i in range(100):
+#         p = Process(target=func, args=(i,))
+#         p_lst.append(p)
+#         p.start()
+#     for p in p_lst: p.join()
+#     Process_time = time.time() - start
+#     print(pool_time, Process_time)
 
-from multiprocessing import Pool, Process  # 引进程池pool 和进程
+# def gen_squares(num):
+#     for x in range(num):
+#         yield x ** 2
+#
+#
+# G = gen_squares(5)
+# print(str(G))
+# print(iter(G))
+
+# """
+# 自定义生成器
+# """
+#
+#
+# def main():
+#     list_example = [i ** 2 for i in range(10)]
+#     print(list_example)
+#     for item in list_example:
+#         print(item)
+#
+#
+# if __name__ == '__main__':
+#     main()
+
+
+"""
+greenlet实现协程
+"""
+#
+# import time
+# from greenlet import greenlet
+# import gevent
+#
+#
+# # 1.导入grennlet模块
+#
+#
+# # 2.创建work1生成器
+# def work1():
+#     while True:
+#         print("正在执行work1...")
+#         time.sleep(0.5)
+#         g2.switch()
+#
+#
+# # 3.创建work2生成器
+# def work2():
+#     while True:
+#         print("正在执行work2.........")
+#         time.sleep(0.5)
+#         g1.switch()
+#
+#
+# if __name__ == '__main__':
+#     # 4.创建greenlet对象
+#     g1 = greenlet(work1)
+#     g2 = greenlet(work2)
+#     g1.switch()
+
+from gevent import monkey;
+
+monkey.patch_all()
+
+import gevent
 import time
 
 
-# 打印功能函数
-def func(n):
-    """
-打印数字1-10
-    :param n:
-    """
-    for i in range(10):
-        print(n + 1)
+def eat(name):
+    print('%s eat 1' % name)
+    gevent.sleep(2)
+    print('%s eat 2' % name)
 
 
-if __name__ == '__main__':
-    start = time.time()
-    pool = Pool(5)  # 不写默认是你电脑的核数+1
-    pool.map(func, range(100))  # 必须是一个可迭代的类型
-    pool_time = time.time() - start
-
-    # 开100个进程
-    p_lst = []
-    start = time.time()
-    for i in range(100):
-        p = Process(target=func, args=(i,))
-        p_lst.append(p)
-        p.start()
-    for p in p_lst: p.join()
-    Process_time = time.time() - start
-    print(pool_time, Process_time)
+def play(name):
+    print('%s play 1' % name)
+    gevent.sleep(1)
+    print('%s play 2' % name)
 
 
+g1 = gevent.spawn(eat, 'egon')
+g2 = gevent.spawn(play, name='egon')
+g1.join()
+g2.join()
+# 或者gevent.joinall([g1,g2])
+print('主')
