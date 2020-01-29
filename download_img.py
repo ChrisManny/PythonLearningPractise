@@ -1,4 +1,4 @@
-import urllib
+import urllib.request
 import gevent
 
 """
@@ -41,8 +41,8 @@ if __name__ == '__main__':
     url2 = "http://t8.baidu.com/it/u=1484500186,1503043093&fm=79&app=86&f=JPEG?w=1280&h=853"
     url3 = "http://t8.baidu.com/it/u=2247852322,986532796&fm=79&app=86&f=JPEG?w=1280&h=853"
 
-    gevent_url1 = gevent.spawn(download_img, url1, "/home/zoey/桌面/1.jpeg")
-    gevent_url2 = gevent.spawn(download_img, url2, "/home/zoey/桌面/2.jpeg")
-    gevent_url3 = gevent.spawn(download_img, url3, "/home/zoey/桌面/3.jpeg")
+    gevent_url1 = gevent.spawn(download_img, url1, "1.jpg")
+    gevent_url2 = gevent.spawn(download_img, url2, "2.jpg")
+    gevent_url3 = gevent.spawn(download_img, url3, "3.jpg")
 
     gevent.joinall([gevent_url1, gevent_url2, gevent_url3])

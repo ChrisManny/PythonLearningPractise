@@ -842,7 +842,7 @@ greenlet实现协程
 #     g2 = greenlet(work2)
 #     g1.switch()
 
-from gevent import monkey;
+from gevent import monkey
 
 monkey.patch_all()
 
