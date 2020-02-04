@@ -323,6 +323,7 @@
 # 测试Git
 
 # import multiprocess
+import json
 
 """
 请把下面的Student对象的gender字段对外隐藏起来，用get_gender()和set_gender()代替，并检查参数有效性：
@@ -842,29 +843,285 @@ greenlet实现协程
 #     g2 = greenlet(work2)
 #     g1.switch()
 
-from gevent import monkey
+# from gevent import monkey
+#
+# monkey.patch_all()
 
-monkey.patch_all()
+# import gevent
+# import time
+#
+#
+# def eat(name):
+#     print('%s eat 1' % name)
+#     gevent.sleep(2)
+#     print('%s eat 2' % name)
+#
+#
+# def play(name):
+#     print('%s play 1' % name)
+#     gevent.sleep(1)
+#     print('%s play 2' % name)
+#
+#
+# g1 = gevent.spawn(eat, 'egon')
+# g2 = gevent.spawn(play, name='egon')
+# g1.join()
+# g2.join()
+# # 或者gevent.joinall([g1,g2])
+# print('主')
 
-import gevent
-import time
+# """
+# 通过一个简单的程序获取百度的源代码
+# """
+# import requests
+#
+# obj = requests.get("https://www.baidu.com/")
+# print(obj.text)
+#
+# """
+# 通过urllib parse向URL中传递参数
+# """
+# import urllib.parse
+# import webbrowser
+#
+# url = "www.baidu.com/s?wd="
+# while True:
+#     user_input = input("请输入想要搜索的内容： ")
+#     # data = {
+#     #     "wd": user_input
+#     # }
+#
+#     final_url = url + urllib.parse.quote(user_input)
+#     print(final_url)
+
+# """
+# 通过伪装user-agent模拟浏览器访问请求
+# """
+# import urllib.request
+# import urllib.parse
+#
+# url = "https://www.baidu.com/"
+# header_content = {
+#     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+#                   "Chrome/79.0.3945.88 Safari/537.36 "
+# }
+#
+# request = urllib.request.Request(url, headers=header_content)
+# response = urllib.request.urlopen(request)
+# print(response.status)
+# print(response.read().decode())
+#
+# """
+# 通过post模拟浏览器访问谷歌翻译进行翻译
+# """
+# 导入模块
+import urllib.request
+import urllib.parse
+
+#
+# 伪装UA
+# user_header = {
+#     # ":authority": "translate.google.cn",
+#     "method": "GET",
+#     # ":path": "/translate_a/single?client=webapp&sl=auto&tl=en&hl=en&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&dt=gt&source=bh&ssel=0&tsel=0&kc=1&tk=91213.513865&q=%E6%B5%8B%E8%AF%95",
+#     "scheme": "https",
+#     "accept": "*/*",
+#     # "accept-encoding": "gzip, deflate, br",
+#     "accept-language": "en,en-US;q=0.9,zh-CN;q=0.8,zh;q=0.7",
+#     "cookie": "_ga=GA1.3.1522755826.1577715872; NID=194=iVXYNyxkrKQffbF5Ba0F_oYHsqifKcSwZZeWckAqQBKTUctOqYNj0r7--Gc_tmYkvj3i0_YGaYZGgdzic8fT3Jabg1YTDLm1kjPU9hZ0iFQ8Ri8EohESxTUJpRGPqGYwESdDHdNK8E3KczzYx3uN-QZOZn1k8jg7p-4up2ohkQg; _gid=GA1.3.43417910.1580477346; 1P_JAR=2020-2-1-12",
+#     # "referer": "https://translate.google.cn/",
+#     "sec-fetch-mode": "cors",
+#     "sec-fetch-site": "same-origin",
+#     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36",
+#     "x-client-data": "CIy2yQEIpLbJAQjBtskBCKmdygEIvLDKAQj3tMoBCJe1ygEI7LXKAQj7u8oBGKukygE="
+# }
+
+# 获取原始url
+# web_url = "https://translate.google.cn/translate_a/single?"
+# q = input("请输入您要翻译的中文: ")  # 根据浏览器检查发现，谷歌定义的用户输入内容参数为q
+# data = {
+#     "client":"webapp",
+#     "sl":"auto",
+#     "tl":"en",
+#     "hl":"en",
+#     "dt":"at",
+#     "dt":"bd",
+#     "dt":"ex",
+#     "dt":"ld",
+#     "dt":"md",
+#     "dt":"qca",
+#     "dt":"rw",
+#     "dt":"rm",
+#     "dt":"ss",
+#     "dt":"t",
+#     "dt":"gt",
+#     "source":"bh",
+#     "ssel":"0",
+#     "tsel":"0",
+#     "kc":"1",
+#     "tk":"91213.513865&",
+#     "q" : q
+# }
+# query_string = urllib.parse.urlencode(data)
+# final_url = web_url + query_string
+
+# 生成伪装的URL
+# request_url = urllib.request.Request(url=final_url, headers=user_header)
+#
+#
+# 获取post参数内容
+# request_parm = {
+#     "client": "webapp",
+#     "sl": "auto",
+#     "tl": "zh-CN",
+#     "hl": "en",
+#     "dt": "at",
+#     "dt": "bd",
+#     "dt": "ex",
+#     "dt": "ld",
+#     "dt": "md",
+#     "dt": "qca",
+#     "dt": "rw",
+#     "dt": "rm",
+#     "dt": "ss",
+#     "dt": "t",
+#     "source": "bh",
+#     "ssel": "0",
+#     "tsel": "3",
+#     "kc": "1",
+#     "tk": "873554.779964",
+#     "q": q
+# }
+# request_parm = urllib.parse.urlencode(request_parm).encode()
+#
+# 发送请求
+# response = urllib.request.urlopen(url=request_url)
+#
+#
+# 展示response
+# response_list = response.read().decode()
+# begin = response_list.index('[[["')
+# end = response_list.index('",')
+# print(response_list[begin+4:end])
+# print(response_list)
 
 
-def eat(name):
-    print('%s eat 1' % name)
-    gevent.sleep(2)
-    print('%s eat 2' % name)
+"""
+通过urllib爬取豆瓣电影排行榜列表
+"""
+
+# import urllib.request
+# import urllib.parse
+#
+# # 伪装header
+# header = {
+#     "Accept": "*/*",
+#     "Host": "movie.douban.com",
+#     "Connection": "keep-alive",
+#     "X-Requested-With": "XMLHttpRequest",
+#     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+#                   "Chrome/79.0.3945.88 Safari/537.36",
+#     "Sec-Fetch-Site": "same-origin",
+#     "Sec-Fetch-Mode": "cors",
+#     "Accept-Language": "en,en-US;q=0.9,zh-CN;q=0.8,zh;q=0.7",
+# }
+#
+# # 拼接URL-解析form参数
+# url = "https://movie.douban.com/j/search_subjects?"
+#
+# data = {
+#     "type": "movie",
+#     "tag": "豆瓣高分",
+#     "sort": "recommend",
+#     "page_limit": "200",
+#     "page_start": "0"
+# }
+#
+# form_data = urllib.parse.urlencode(data)
+# request_url = url + form_data
+# print("正在从以下地址请求数据————")
+# print(request_url)
+#
+# # 发送request请求
+# request_send = urllib.request.Request(url=request_url, headers=header)
+# response = urllib.request.urlopen(request_send)
+#
+# # 读取response到文件夹
+# # print(response.read().decode())
+# locate = r"C:\Users\Chris Manny\Desktop"
+# file_name = "\豆瓣200大高分电影.json"
+# file_path = locate + file_name
+#
+# with open(file_path,"wb") as fp:
+#     print("文件创建成功，写入数据中...")
+#     fp.write(response.read())
+#     print("任务执行完毕！")
 
 
-def play(name):
-    print('%s play 1' % name)
-    gevent.sleep(1)
-    print('%s play 2' % name)
+"""
+通过urllib爬取肯德基餐厅查询post方式
+"""
+# import urllib.request
+# import urllib.parse
+#
+# # 伪装header
+# header = {
+#     "Host": "www.kfc.com.cn",
+#     "Connection": "keep-alive",
+#     "Content-Length": "41",
+#     "Accept": "application/json, text/javascript, */*; q=0.01",
+#     "X-Requested-With": "XMLHttpRequest",
+#     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36",
+#     "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+#     "Origin": "http://www.kfc.com.cn",
+#     "Referer": "http://www.kfc.com.cn/kfccda/storelist/index.aspx",
+#     "Accept-Language": "en,en-US;q=0.9,zh-CN;q=0.8,zh;q=0.7",
+#     "Cookie": "Hm_lvt_1039f1218e57655b6677f30913227148=1580617586; Hm_lpvt_1039f1218e57655b6677f30913227148=1580617586; ASP.NET_SessionId=1pbxoesm2ykf1bieoqn1n00b; KLBRSID=76cac537517c99f2fa8f912b4403b8f8|1580618387|1580617584"
+# }
+#
+# # 获取URL-解析form参数（POST方式）
+# url = "http://www.kfc.com.cn/kfccda/ashx/GetStoreList.ashx?op=cname"
+#
+# data = {
+#     "cname": "杭州",
+#     "pageIndex": "1",
+#     "pageSize": "100",
+#     "pid": "",
+# }
+#
+# form_data = urllib.parse.urlencode(data)
+#
+# print("即将向以下地址POST数据————")
+# print(url)
+#
+# # 发送request请求
+# import jsonpath
+#
+# request_send = urllib.request.Request(url=url, headers=header)
+# response = urllib.request.urlopen(request_send, form_data.encode())
+# print("成功获取到KFC回应...")
+#
+# with open("杭州KFC网点.json", "rb") as fp:
+#
+#     s = json.load(fp)
+#     print(s["storeName"])
+#     # result = jsonpath.jsonpath(t, "$.store.Table1[*].storeName")
+#     # print(result)
 
-
-g1 = gevent.spawn(eat, 'egon')
-g2 = gevent.spawn(play, name='egon')
-g1.join()
-g2.join()
-# 或者gevent.joinall([g1,g2])
-print('主')
+# # 读取response到文件夹
+# # print(response.read().decode())
+# locate = r"C:\Users\Chris Manny\Desktop"
+# file_name = "\杭州KFC网点.json"
+# file_path = locate + file_name
+#
+#
+# with open(file_path, "wb") as fp:
+#     print("文件创建成功，写入数据中...")
+#     fp.write(response.read())
+#     print("任务执行完毕！")
+import re
+with open(r"腾讯国际新闻2020-02-03.json","rb") as fp:
+    result_title = re.findall(r'title": "(.*?)",', fp.read().decode())
+    result_link = re.findall(r'media_icon": "(.*?)"},', fp.read().decode())
+    print(result_title)
+    print(result_link)
