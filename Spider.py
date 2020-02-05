@@ -1,7 +1,8 @@
 import urllib.request
 import urllib.parse
 import re
-import os
+from apscheduler.schedulers.blocking import BlockingScheduler
+from datetime import datetime
 
 
 class Spider:
@@ -9,8 +10,8 @@ class Spider:
     创建Spider爬虫类，其中包括以下方法：
     """
 
-    def __init__(self, page):
-        self.page = page
+    def __init__(self):
+        pass
 
     def send_request(self):
         """
@@ -35,14 +36,14 @@ class Spider:
             "cid": "135",
             "token": "6e92c215fb08afa901ac31eca115a34f",
             "ext": "world",
-            "page": self.page,
+            "page": "1",
             "expIds": "20200131009129|20200203A049ND|20200203A04L93|20200203A0271M|20200203A009T6",
             "expIds": "20200201A04Q9M|20200201A0CE83|20200201A0HESF|20200201A0FRVA|20200201A09EEK|20200201V06Y9D"
                       "|20200201A04I6R|20200121A0ME7R|20200201V05BCV|20200201A0HESC",
             "callback": "__jp9"
         }
+
         formdata = urllib.parse.urlencode(formdata).encode()
-        self.page += 1
 
         # 使用IP proxy
         """
@@ -79,7 +80,8 @@ class Spider:
         """
         print("开始执行IO方法")
         try:
-            with open(r"腾讯国际新闻2020-02-03.json", "a+") as fp:
+            with open(r"腾讯国际新闻2020-02-03.json", "w") as fp:
+                fp.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\n")
                 for item in self.result_title:
                     fp.write(item + "\n")
                 print("数据写入成功")
@@ -96,8 +98,9 @@ class Spider:
 
 
 if __name__ == '__main__':
-    i = 1
-    spider_tecent_news = Spider(i)
-    while i <= 10:
-        spider_tecent_news.send_request()
-        i += 1
+    spider_tecent_news = Spider()
+
+    # 定时执行主任务BlockingScheduler
+    scheduler = BlockingScheduler()
+    scheduler.add_job(func=spider_tecent_news.send_request, trigger='cron', day_of_week='1-5', hour=20, minute=38)
+    scheduler.start()
