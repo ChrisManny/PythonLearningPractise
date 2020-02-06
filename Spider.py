@@ -4,6 +4,8 @@ import re
 from apscheduler.schedulers.blocking import BlockingScheduler
 from datetime import datetime
 
+import main, auto_email
+
 
 class Spider:
     """
@@ -80,27 +82,31 @@ class Spider:
         """
         print("开始执行IO方法")
         try:
-            with open(r"腾讯国际新闻2020-02-03.json", "w") as fp:
-                fp.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\n")
-                for item in self.result_title:
-                    fp.write(item + "\n")
-                print("数据写入成功")
+            fp = open(r"腾讯国际新闻2020-02-03.json", "w")
+            fp.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\n")
+            for item in self.result_title:
+                fp.write(item + "\n")
+            print("数据写入成功")
+            fp = open(r"腾讯国际新闻2020-02-03.json")
+            content = fp.read()
+            self.user_controller(content)
+            fp.close()
         except FileNotFoundError:
             with open(r"腾讯国际新闻2020-02-03.json", "w") as fp:
                 print("文件创建成功")
-        # self.excute_response(fp)
 
-    def user_controller(self):
+    def user_controller(self, content):
         """
-        4.用户控制器（非必须，可以在其中定义一些爬虫开始与关闭的行为。）
+        4.用户控制器（非必须，在数据爬取成功之后向用户发送邮件）
         """
-        pass
+        # 读取爬虫结果文件，并且执行发送邮件方法
+
+        print("文件已打开")
+        # print(content)
+        auto_email.Send_email(recei_list, email_title, content)
 
 
-if __name__ == '__main__':
-    spider_tecent_news = Spider()
-
-    # 定时执行主任务BlockingScheduler
-    scheduler = BlockingScheduler()
-    scheduler.add_job(func=spider_tecent_news.send_request, trigger='cron', day_of_week='1-5', hour=20, minute=38)
-    scheduler.start()
+# 创建一个爬虫实例对象，以供主函数调用
+spider_tecent_news = Spider()
+recei_list = ["zhangzeyu922@yeah.net", "18368720378@163.com"]
+email_title = "每日国际新闻晚报"
